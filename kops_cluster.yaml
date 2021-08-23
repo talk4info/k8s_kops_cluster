@@ -2,7 +2,7 @@ apiVersion: kops.k8s.io/v1alpha2
 kind: Cluster
 metadata:
   creationTimestamp: null
-  name: myk8stest2.test.com
+  name: KOPS_STATE_STORE
 spec:
   api:
     dns: {}
@@ -10,8 +10,8 @@ spec:
     rbac: {}
   channel: stable
   cloudProvider: aws
-  configBase: s3://myk8sbucket2021first/myk8stest2.test.com
-  dnsZone: mytest.com.local
+  configBase: s3://KOPS_STATE_STORE/KOPS_STATE_STORE
+  dnsZone: KOPS_STATE_STORE
   etcdClusters:
   - cpuRequest: 100m
     etcdMembers:
@@ -35,7 +35,7 @@ spec:
   kubernetesApiAccess:
   - 0.0.0.0/0
   kubernetesVersion: 1.21.3
-  masterPublicName: api.myk8stest2.test.com
+  masterPublicName: api.KOPS_STATE_STORE
   networkCIDR: 172.20.0.0/16
   networking:
     kubenet: {}
@@ -60,7 +60,7 @@ kind: InstanceGroup
 metadata:
   creationTimestamp: null
   labels:
-    kops.k8s.io/cluster: myk8stest2.test.com
+    kops.k8s.io/cluster: KOPS_STATE_STORE
   name: master-eu-west-2a
 spec:
   image: 099720109477/ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20210720
@@ -81,7 +81,7 @@ kind: InstanceGroup
 metadata:
   creationTimestamp: null
   labels:
-    kops.k8s.io/cluster: myk8stest2.test.com
+    kops.k8s.io/cluster: KOPS_STATE_STORE
   name: nodes-eu-west-2a
 spec:
   image: 099720109477/ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20210720
