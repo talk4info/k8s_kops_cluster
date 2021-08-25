@@ -28,11 +28,10 @@
  rm -rf ~/.ssh/id_rsa*
  ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa
  kops create secret --name $KOPS_STATE_STORE sshpublickey admin -i ~/.ssh/id_rsa.pub
- 
  kops update cluster $KOPS_STATE_STORE --yes
- 
  kops validate cluster --wait 2m
  kubectl get nodes
+ 
 --------------------------------------------------------------------------
 
 6. save the job 
