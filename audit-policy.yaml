@@ -1,0 +1,41 @@
+apiVersion: audit.k8s.io/v1beta1
+kind: Policy
+omitStages:
+- "RequestReceived"
+Rules:
+   - level: RequestResponse
+     resources:
+     - group: ""
+      # Resource "pods" doesn't match requests to any subresource of pods,
+      # which is consistent with the RBAC policy.
+      resources: ["pods"]
+  # Only check access to resource "pods"
+   - level: Metadata
+    resources:
+    - group: ""
+      resources: ["pods/log", "pods/status"]
+  # Don't log watch requests by the "system:kube-proxy" on endpoints or services
+  - level: None
+    users: ["system:kube-proxy"]
+    verbs: ["watch"]
+    resources:
+    - group: "" # core API group
+      resources: ["endpoints", "services"]
+  # Don't log authenticated requests to certain non-resource URL paths.
+  - level: None
+    userGroups: ["system:authenticated"]
+    nonResourceURLs:
+    - "/api*" # Wildcard matching.
+    - "/version"
+  # Log the request body of configmap changes in kube-system.
+  - level: Request
+  - level: Request
+   users: ["admin"]
+     resources:
+    - group: ""
+      resources: ["*"]
+   - level: Request
+      user: ["system:anonymous"]
+      resources:
+    - group: ""
+     resources: ["*"]
