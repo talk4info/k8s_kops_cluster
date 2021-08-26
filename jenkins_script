@@ -25,6 +25,7 @@ case $choice in
 	kops update cluster $KOPS_STATE_STORE --yes
 	kops validate cluster --wait 2m
 	kubectl get nodes
+	kube-apiserver --audit-policy-file=audit-policy.yaml --audit-log-path=/var/log/audit.log
     ;;
 
   update)
