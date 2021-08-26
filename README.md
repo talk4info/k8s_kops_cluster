@@ -1,6 +1,15 @@
 # k8s_kops_cluster using Jenkins
 
-Please download the extensible plugin to run this job..
+Pre-requisites: 
+1. Jenkins server
+2. All required plugins including extensible and deploy plugins 
+3. Code repository access and details
+4. AWS cloud access key and secret
+5. An IAM role with full access to EC2, Route53, Loadbalancer, s3 bukets.
+6. A cluster DNS name 
+7. A hosted zone details
+8. VPC and subnet details
+
 
 **Below are the steps to create CICD pipeline using KOPS and Jenkins on AWS cloud provider**
 ===========================================================================================
