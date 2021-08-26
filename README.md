@@ -25,15 +25,15 @@ Please download the extensible plugin to run this job..
 8. Copy the commands from Jenkins_script file and save it 
 9. We are ready for our first kubernetes build , you can validate your kops_cluster.yaml file for any resource level changes like vpc , subnet, master, nodes details and its count and storage size , linux image type and finally the clustername which needs to be updated.
 
-8. NOTE : if you are using existing kops_cluster.yaml configuration and you are still in Free tier subscription from AWS then you would be charged for route53 (may be 1 GBP for a day).
+10. NOTE : if you are using existing kops_cluster.yaml configuration and you are still in Free tier subscription from AWS then you would be charged for route53 (may be 1 GBP for a day).
 
-9 . Lets run the job to create our Kubernetes cluster on AWS in less than 5mins 
+11 . Lets run the job to create our Kubernetes cluster on AWS in less than 5mins 
  select build with Parameter 
  choice : create
  value : " Input your cluster Name "
  finally execute the job to create a infrastructure 
-10. Login to AWS console and validate all details are as per requirements
-11. ssh to Master box from jenkins box to list all nodes and cluster details.
+12. Login to AWS console and validate all details are as per requirements
+13. ssh to Master box from jenkins box to list all nodes and cluster details.
 
 
 
