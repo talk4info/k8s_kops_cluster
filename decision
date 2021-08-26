@@ -1,0 +1,22 @@
+Kubernets installation as IAC using KOPS consideration decision :
+
+Its Fully automated installation
+Uses DNS to identify clusters
+Self-healing: everything runs in Auto-Scaling Groups
+Limited OS support (Debian preferred, Ubuntu 16.04 supported, early support for CentOS & RHEL)
+High-Availability support
+Direct provision or terraform manifest generation
+
+As a part of the setup, I would need an Ubuntu or Debian instance with latest updates and other supporting utility/tools like AWS-CLI, S3 bucket, Hosted Zone on Route 53 and a registered domain
+
+launch an AWS EC2 Ubuntu instance and update with the latest packages.
+
+I have downloaded the latest version of kops, aws cli and kubectl 
+
+I have created a domain for the cluster user “kops” and DNS for discovery which will be used inside the cluster and to reach the kubernetes API server from the client. It should have a valid DNS name. I recommend using a subdomain for the cluster configuration.
+
+I have created a new S3 bucket with a meaningful name which is used to store the cluster state. Kubernetes uses S3 to store the cluster details like configuration, keys, etc.
+
+I have chosen the t2.micro which is a free EC2 instance
+
+I have used jenkins to automate the task as CICD IAC pipeline
