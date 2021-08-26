@@ -1,0 +1,148 @@
+Running as SYSTEM
+Building in workspace /var/lib/jenkins/workspace/kops1
+[WS-CLEANUP] Deleting project workspace...
+[WS-CLEANUP] Deferred wipeout is used...
+[WS-CLEANUP] Done
+The recommended git tool is: NONE
+No credentials specified
+Cloning the remote Git repository
+Cloning repository https://github.com/talk4info/k8s_kops_cluster.git
+ > git init /var/lib/jenkins/workspace/kops1 # timeout=10
+Fetching upstream changes from https://github.com/talk4info/k8s_kops_cluster.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.25.1'
+ > git fetch --tags --force --progress -- https://github.com/talk4info/k8s_kops_cluster.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git config remote.origin.url https://github.com/talk4info/k8s_kops_cluster.git # timeout=10
+ > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+Avoid second fetch
+Seen branch in repository origin/main
+Seen 1 remote branch
+ > git show-ref --tags -d # timeout=10
+Checking out Revision 1493943576737c2d763ddbe836e55a281df09ac6 (origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 1493943576737c2d763ddbe836e55a281df09ac6 # timeout=10
+Commit message: "Update README.md"
+ > git rev-list --no-walk a6930ecfef2c293237eaf16e17c6e71c14bac061 # timeout=10
+[kops1] $ /bin/sh -xe /tmp/jenkins6278933037367904491.sh
++ aws configure get aws_secret_access_key
++ export AWS_SECRET_ACCESS_KEY=
++ aws configure get aws_secret_access_id
++ export AWS_SECRET_ACCESS_ID=
++ export KOPS_STATE_STORE=my-cluster.test.com
++ curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt
++ curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.22.1/bin/linux/amd64/kubectl
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  0 44.7M    0 19371    0     0   121k      0  0:06:17 --:--:--  0:06:17  120k
+100 44.7M  100 44.7M    0     0  82.3M      0 --:--:-- --:--:-- --:--:-- 82.2M
++ chmod +x ./kubectl
++ sudo mv ./kubectl /usr/local/bin/kubectl
++ curl -s https://api.github.com/repos/kubernetes/kops/releases/latest
++ cut -d " -f 4
++ grep tag_name
++ curl -LO https://github.com/kubernetes/kops/releases/download/v1.21.1/kops-linux-amd64
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   622  100   622    0     0   3004      0 --:--:-- --:--:-- --:--:--  2990
+
+ 29  155M   29 46.0M    0     0  39.2M      0  0:00:03  0:00:01  0:00:02 39.2M
+ 64  155M   64  100M    0     0  46.0M      0  0:00:03  0:00:02  0:00:01 54.1M
+ 99  155M   99  154M    0     0  48.6M      0  0:00:03  0:00:03 --:--:-- 54.1M
+100  155M  100  155M    0     0  48.7M      0  0:00:03  0:00:03 --:--:-- 54.2M
++ chmod +x kops-linux-amd64
++ sudo mv kops-linux-amd64 /usr/local/bin/kops
++ kops version
+Version 1.21.1 (git-ffabc3bf682bfc25ffdce99e54005345df94b467)
++ pwd
+/var/lib/jenkins/workspace/kops1
++ sed -i s/KOPS_STATE_STORE/my-cluster.test.com/g kops_cluster.yaml
++ ls -al kops_cluster.yaml
+-rw-r--r-- 1 jenkins jenkins 2113 Aug 26 10:08 kops_cluster.yaml
++ aws s3 mb s3://my-cluster.test.com
+make_bucket: my-cluster.test.com
++ pwd
+/var/lib/jenkins/workspace/kops1
++ kops create -f kops_cluster.yaml
+
+Created cluster/my-cluster.test.com
+Created instancegroup/master-eu-west-2a
+Created instancegroup/nodes-eu-west-2a
+
+To deploy these resources, run: kops update cluster --name my-cluster.test.com --yes
+
++ ls -al kops_cluster.yaml
+-rw-r--r-- 1 jenkins jenkins 2113 Aug 26 10:08 kops_cluster.yaml
++ rm -rf /var/lib/jenkins/.ssh/id_rsa /var/lib/jenkins/.ssh/id_rsa.pub
++ ssh-keygen -b 2048 -t rsa -f /var/lib/jenkins/.ssh/id_rsa
+Enter passphrase (empty for no passphrase): Enter same passphrase again: Generating public/private rsa key pair.
+Your identification has been saved in /var/lib/jenkins/.ssh/id_rsa
+Your public key has been saved in /var/lib/jenkins/.ssh/id_rsa.pub
+The key fingerprint is:
+SHA256:z8tXQXW09vT7q0Pj+UJIS732I2UU2oetn6mbxactqnI jenkins@ip-172-31-1-151
+The key's randomart image is:
++---[RSA 2048]----+
+|               o+|
+|              ..o|
+|            ..o=o|
+|           o o++=|
+|        S o o oo+|
+|         o o *+o.|
+|          o =.*=+|
+|        ..E..*+B+|
+|         o+o.*X+=|
++----[SHA256]-----+
++ kops create secret --name my-cluster.test.com sshpublickey admin -i /var/lib/jenkins/.ssh/id_rsa.pub
++ kops update cluster my-cluster.test.com --yes
+
+*********************************************************************************
+
+A new kubernetes version is available: 1.21.4
+Upgrading is recommended (try kops upgrade cluster)
+
+More information: https://github.com/kubernetes/kops/blob/master/permalinks/upgrade_k8s.md#1.21.4
+
+*********************************************************************************
+
+I0826 10:08:28.342094    3174 dns.go:97] Private DNS: skipping DNS validation
+I0826 10:08:30.046520    3174 executor.go:111] Tasks: 0 done / 79 total; 42 can run
+W0826 10:08:30.502042    3174 vfs_castore.go:612] CA private key was not found
+I0826 10:08:30.650868    3174 keypair.go:195] Issuing new certificate: "etcd-clients-ca"
+I0826 10:08:30.696649    3174 keypair.go:195] Issuing new certificate: "etcd-manager-ca-events"
+I0826 10:08:30.716815    3174 keypair.go:195] Issuing new certificate: "etcd-manager-ca-main"
+W0826 10:08:30.738273    3174 vfs_castore.go:612] CA private key was not found
+I0826 10:08:30.738358    3174 keypair.go:195] Issuing new certificate: "ca"
+I0826 10:08:30.763168    3174 keypair.go:195] Issuing new certificate: "etcd-peers-ca-main"
+I0826 10:08:30.777102    3174 keypair.go:195] Issuing new certificate: "etcd-peers-ca-events"
+I0826 10:08:30.817415    3174 keypair.go:195] Issuing new certificate: "apiserver-aggregator-ca"
+I0826 10:08:31.300668    3174 keypair.go:195] Issuing new certificate: "service-account"
+I0826 10:08:33.304070    3174 executor.go:111] Tasks: 42 done / 79 total; 17 can run
+I0826 10:08:34.378121    3174 executor.go:111] Tasks: 59 done / 79 total; 18 can run
+I0826 10:08:34.686417    3174 executor.go:111] Tasks: 77 done / 79 total; 2 can run
+I0826 10:08:35.558911    3174 executor.go:155] No progress made, sleeping before retrying 2 task(s)
+I0826 10:08:45.559373    3174 executor.go:111] Tasks: 77 done / 79 total; 2 can run
+I0826 10:08:46.967894    3174 executor.go:111] Tasks: 79 done / 79 total; 0 can run
+I0826 10:08:46.968006    3174 dns.go:157] Checking DNS records
+I0826 10:08:47.676778    3174 dns.go:219] Pre-creating DNS records
+I0826 10:08:48.303145    3174 update_cluster.go:313] Exporting kubecfg for cluster
+W0826 10:08:48.336177    3174 create_kubecfg.go:91] Did not find API endpoint for gossip hostname; may not be able to reach cluster
+kOps has set your kubectl context to my-cluster.test.com
+W0826 10:08:48.755984    3174 update_cluster.go:337] Exported kubecfg with no user authentication; use --admin, --user or --auth-plugin flags with `kops export kubecfg`
+
+Cluster is starting.  It should be ready in a few minutes.
+
+Suggestions:
+ * validate cluster: kops validate cluster --wait 10m
+ * list nodes: kubectl get nodes --show-labels
+ * ssh to the master: ssh -i ~/.ssh/id_rsa ubuntu@api.my-cluster.test.com
+ * the ubuntu user is specific to Ubuntu. If not using Ubuntu please use the appropriate user based on your OS.
+ * read about installing addons at: https://kops.sigs.k8s.io/operations/addons.
+
++ kops validate cluster --wait 10m
+Using cluster from kubectl context: my-cluster.test.com
+
+Validating cluster my-cluster.test.com
