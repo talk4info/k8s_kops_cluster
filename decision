@@ -1,4 +1,4 @@
-Kubernets installation as IAC using KOPS consideration decision :
+Kubernets installation as IAC using KOPS consideration reason and flow :
 
 Its Fully automated installation
 Uses DNS to identify clusters
