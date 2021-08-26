@@ -1,0 +1,47 @@
+export AWS_SECRET_ACCESS_KEY=$(aws configure get aws_secret_access_key)
+export AWS_SECRET_ACCESS_ID=$(aws configure get aws_secret_access_id)
+export KOPS_STATE_STORE=$value
+
+case $choice in
+
+  create)
+    echo -n "we are going to create new Kubernetes cluster $KOPS_STATE_STORE"
+    curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+	chmod +x ./kubectl
+	sudo mv ./kubectl /usr/local/bin/kubectl
+	curl -LO https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-linux-amd64
+	chmod +x kops-linux-amd64
+	sudo mv kops-linux-amd64 /usr/local/bin/kops
+	kops version
+	pwd
+	sed -i "s/KOPS_STATE_STORE/$KOPS_STATE_STORE/g" kops_cluster.yaml 
+	ls -al kops_cluster.yaml
+	aws s3 mb s3://$KOPS_STATE_STORE
+	kops create -f kops_cluster.yaml 
+	ls -al kops_cluster.yaml
+	rm -rf ~/.ssh/id_rsa*
+	ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa
+	kops create secret --name $KOPS_STATE_STORE sshpublickey admin -i ~/.ssh/id_rsa.pub
+	kops update cluster $KOPS_STATE_STORE --yes
+	kops validate cluster --wait 2m
+	kubectl get nodes
+    ;;
+
+  update)
+    echo -n "we are going to update Kubernetes cluster $KOPS_STATE_STORE"
+   sed -i "s/KOPS_STATE_STORE/$KOPS_STATE_STORE/g" kops_cluster.yaml 
+   kops replace -f kops_cluster.yaml --force
+   kops update cluster $KOPS_STATE_STORE --yes
+   kops rolling-update cluster $KOPS_STATE_STORE --yes
+
+    ;;
+
+  delete )
+    echo -n "we are going to delete Kubernetes cluster $KOPS_STATE_STORE"
+    kops delete cluster $KOPS_STATE_STORE --yes
+    ;;
+
+  *)
+    echo -n "unknown"
+    ;;
+esac
